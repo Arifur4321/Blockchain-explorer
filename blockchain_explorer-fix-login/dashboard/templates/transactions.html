@@ -1,0 +1,50 @@
+{%extends "base.html" %}
+
+{%block content%}
+
+<a href={{url_for('pdf_generator_transactions')}}> <img class="pdf-icon" src={{ url_for('static', filename='img/PDF-ICON.png' )
+}} data-toggle="tooltip" data-placement="top" title="Generate PDF" /> </a>
+
+<h2 class="generic-title title-centered">Transazioni</h2>
+
+<div class="table-container">
+  
+  <table id="myTable" class="table table-striped">
+
+    <thead>
+
+      <tr>
+
+        <th scope="col"></th>     
+        <th scope="col">ID Transazione </th>
+        <th scope="col">Tipologia</th>
+        <th scope="col">Data</th>
+        <th scope="col">Blocco</th>
+    
+      </tr>
+
+    </thead>
+
+    <tbody>
+       {% for tx in listTransactions %}
+            <tr>
+              <td>{{loop.index0 + 1}}</td>
+              <td>{{tx['txid']}}</td>
+              <td>{{tx['tags'][0].capitalize()}}</td>
+              <td>{{datetime.fromtimestamp(tx['blocktime'])}}</td>
+              <td>{{tx['blockheight']}}</td>
+            </tr>
+       {% endfor %}
+    </tbody>
+
+  </table>
+  
+</div>
+
+{% if previous_url and previous_url != 'None' %}
+    <div class="previous-url-button">
+        <a href={{previous_url}}>Indietro</a>
+    </div>
+{% endif %}
+
+{%endblock%}

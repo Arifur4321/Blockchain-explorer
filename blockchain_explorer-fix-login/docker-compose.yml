@@ -1,0 +1,83 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: app
+ 
+     
+    # this will pull the multichain explorer 2 docker image   image from dockerhub
+    image: arifur43210/multichain-explorer-2:latest   # or the path of DockerFile of multichain explorer 2
+    ports:
+      - "5000:5000"
+    depends_on:
+      - masternode
+    
+
+#   backend:
+#     # this will pull the multichain docker image from dockerhub
+#     image: kunstmaan/base-multichain #or the path of Dockerfile of multichain 
+#     ports:
+#       - "9000:9000"
+ 
+    # basenode:
+    #     build: ./base
+    #     stdin_open: true
+    #     tty: true
+  masternode:
+        build: ./master
+        stdin_open: true
+        tty: true
+        expose:
+            - 7557
+            - 8002
+        environment:
+            CHAINNAME: MyChain
+            NETWORK_PORT: 7557
+            RPC_PORT: 8002
+            RPC_USER: multichainrpc
+            RPC_PASSWORD: 4QeipT32VxD4i1ySJF2Bzqf3qHRaJ8tzoJ5HfxnjwsVR
+            RPC_ALLOW_IP: 0.0.0.0/0.0.0.0
+            PARAM_TARGET_BLOCK_SIZE: target-block-time|30
+            PARAM_ANYONE_CAN_CONNECT: anyone-can-connect|true
+            PARAM_ANYONE_CAN_MINE: anyone-can-mine|true
+  slavenode:
+        build: ./node
+        stdin_open: true
+        tty: true
+        expose:
+            - 7557
+            - 8002
+        environment:
+            CHAINNAME: MyChain
+            NETWORK_PORT: 7557
+            RPC_PORT: 8002
+            RPC_USER: multichainrpc
+            RPC_PASSWORD: this-is-insecure-change-it
+            RPC_ALLOW_IP: 0.0.0.0/0.0.0.0
+            MASTER_NODE: masternode
+        links:
+            - masternode
+        depends_on:
+            - masternode
+  explorernode:
+        build: ./explorer
+        stdin_open: true
+        tty: true
+        expose:
+            - 2750
+            - 7557
+            - 8002
+        environment:
+            CHAINNAME: MyChain
+            NETWORK_PORT: 7557
+            RPC_PORT: 8002
+            RPC_USER: multichainrpc
+            RPC_PASSWORD: this-is-insecure-change-it
+            RPC_ALLOW_IP: 0.0.0.0/0.0.0.0
+            MASTER_NODE: masternode
+        links:
+            - masternode
+        depends_on:
+            - masternode
+   
+

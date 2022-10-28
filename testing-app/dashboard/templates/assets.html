@@ -1,0 +1,75 @@
+{%extends "base.html" %}
+
+{%block content%}
+
+<a href={{url_for('pdf_generator')}} > <img  style="float:right; " src={{ url_for('static', filename='img/PDF-ICON.png') }}  data-toggle="tooltip" data-placement="top" title="Generate PDF" />   </a>
+<div>
+    <table id="myTable"  class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Nome Utente </th>
+            <th style="width: 145px;" scope="col">Data Transazione</th>
+            <th style="width: 195px;" scope="col">Tipo Operazione effettuata </th>
+            <th scope="col">Descrizione</th>
+            <th scope="col">Stato</th>
+            <th scope="col">Indirizzo Blockchain </th>
+          </tr>
+        </thead>
+        <tbody>
+
+            {% for asset in listAssets %}
+
+        <tr>
+            <td>{{asset['name'].partition("-")[0] }}</td>
+            <td>{{asset['name'][-19:] }}</td>
+            <td>{{asset['details']['tipo_oprazione'] }}</td>
+            <td>{{asset['details']['descrizione'] }}</td>
+            {% if asset['details']['tipo_oprazione']=="Cambio Stato Fascicolo"%}
+            <td>{{asset['details']['statoNew'] }}</td>
+            {% elif asset['details']['tipo_oprazione']=="Cancellazione Messaggio Fascicolo"%}
+            <td>{{asset['details']['statoCancellazione'] }}</td>
+            {% elif asset['details']['tipo_oprazione']=="Cancellazione Alert Fascicolo"%}
+            <td>{{asset['details']['statoCancellazione'] }}</td>
+            {% elif asset['details']['tipo_oprazione']=="Caricamento Nuovo Documento nel Fascicolo"%}
+            <td></td>
+            {% elif asset['details']['tipo_oprazione']=="Modifica Documento nel Fascicolo"%}
+            <td></td>
+            {% elif asset['details']['tipo_oprazione']=="Visualizzazione Documento nel Fascicolo"%}
+            <td></td>
+            {% elif asset['details']['tipo_oprazione']=="Cancellazione Documento nel Fascicolo"%}
+            <td>{{asset['details']['statoDocumento'] }}</td>
+            {% elif asset['details']['tipo_oprazione']=="Conferma Lettura Messagio nel Fascicolo"%}
+            <td>{{asset['details']['statoLettura'] }}</td>
+            {% elif asset['details']['tipo_oprazione']=="Spegnimento Alert del Fascicolo"%}
+            <td>{{asset['details']['statoLettura'] }}</td>
+            {% elif asset['details']['tipo_oprazione']=="Nuovo Messaggio nel Fascicolo"%}
+            <td></td>
+            {% elif asset['details']['tipo_oprazione']=="Nuovo Alert nel Fascicolo"%}
+            <td></td>
+            {% elif asset['details']['tipo_oprazione']=="Modifica Messaggio nel Fascicolo"%}
+            <td></td>
+            {% elif asset['details']['tipo_oprazione']=="Modifica Alert nel Fascicolo"%}
+            <td></td>
+            {% elif asset['details']['tipo_oprazione']=="Nuovo Scoring del Fascicolo"%}
+            <td>{{asset['details']['scoreNew'] }}</td>
+            
+            {%endif%}
+            <td> 13sTd6nVoFxLJek1Lg3eC9BUno8fEHqZSX</td>
+        </tr>
+        {% endfor %} 
+        </tbody>
+      </table>
+</div>
+{%endblock%}
+
+
+{%block script_after%}
+    <script>
+      $(document).ready(function () {
+        $('#myTable').DataTable({
+          "paging": true // false to disable pagination (or any other option)
+        });
+        $('.dataTables_length').addClass('bs-select');
+      });
+    </script>
+{%endblock%}

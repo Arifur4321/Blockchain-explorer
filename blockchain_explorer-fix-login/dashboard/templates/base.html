@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="IT-it">
+
+
+{%block head%} 
+    {% include 'head.html'%}
+{%endblock%}
+
+<body>
+
+    {% include 'header.html'%}
+
+    {% include 'navbar.html' %}
+
+    {%block content%}
+    {%endblock%}
+
+    {%block footer%}
+        {% include 'footer.html'%}
+    {%endblock%}
+
+    {%block script_after %}
+
+    {%endblock%}
+
+</body>
+
+</html>

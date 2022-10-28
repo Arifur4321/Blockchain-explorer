@@ -1,0 +1,21 @@
+#general-info-container{
+    display: flex;
+    justify-content: center;
+    column-gap: 8%;
+    align-items: flex-start;
+}
+
+#general-info-container .info-col{
+    flex-basis: 35%;
+    display: flex;
+    flex-direction: column;
+}
+
+#params-table tr td:last-of-type{
+    max-width: 300px;
+    word-wrap: break-word;
+}
+
+.info-table-container h2{
+    margin-top: 50px;
+}

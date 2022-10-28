@@ -1,0 +1,41 @@
+{%extends "base.html" %}
+ 
+
+{%block content%}
+ 
+<div class="table-container">
+  <table   class="table table-striped">
+    <thead>
+      <tr>
+
+        <th scope="col">Name  </th>
+        <th scope="col">PDF Items</th>
+        <th scope="col"> Keys </th>
+        <th scope="col">Publishers Details</th>
+        <th scope="col">Restrict</th>
+        <th></th>
+        <th scope="col">Creator Details</th>
+        <th scope="col">Creation Transaction </th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for asset in streamsdata %}
+
+      <tr>
+        <td>{{asset['name']}} </td>
+        <td>{{asset['items']}} </td>
+        <td>{{asset['keys']}} </td>
+        <td>{{asset['publishers']}} </td>
+        <td>None<td>
+        <td>13sTd6nVoFxLJek1Lg3eC9BUno8fEHqZSX</td>
+        <td>{{asset['createtxid']}} </td>
+        
+      </tr>
+
+      {% endfor %}
+
+    </tbody>
+    </table>
+</div>
+{%endblock%}

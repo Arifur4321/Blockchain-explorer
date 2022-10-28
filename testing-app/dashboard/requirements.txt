@@ -1,0 +1,5 @@
+bokeh==2.4.3
+flask==2.2.2
+python_dotenv==0.21.0
+mcrpc==2.0.6.0
+pandas==1.4.4

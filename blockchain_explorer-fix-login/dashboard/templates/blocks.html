@@ -1,0 +1,108 @@
+{%extends "base.html" %}
+
+{%block content%}
+<a href={{url_for('pdf_generatorblocks')}}> <img class="pdf-icon" src={{ url_for('static', filename='img/PDF-ICON.png' )
+}} data-toggle="tooltip" data-placement="top" title="Generate PDF" /> </a>
+
+<h2 class="generic-title title-centered">Blocchi</h2>
+
+<div class="table-container">
+  
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Blocco</th>
+            <th scope="col">Hash</th>
+            <th scope="col">Miner</th>
+            <th scope="col">Data</th>
+            <th scope="col">Transazioni</th>
+        
+          </tr>
+        </thead>
+        <tbody id="scroller">
+          <template id="row-template">
+            <tr style="height: 50px;">
+              <td id="block"></td>
+              <td id="hash"></td>
+              <td id="miner"></td>
+              <td id="time"></td>
+              <td id="txs"></td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+
+</div>
+
+<div id="sentinel">
+  <p class="invisible">.</p>
+</div>
+
+{% if previous_url and previous_url != 'None' %}
+    <div class="previous-url-button">
+        <a href={{previous_url}}>Indietro</a>
+    </div>
+{% endif %}
+
+{%endblock%}
+
+{%block script_after %}
+
+<script
+  src="https://code.jquery.com/jquery-3.6.1.min.js"
+  integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ="
+  crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js" integrity="sha512-6UofPqm0QupIL0kzS/UIzekR73/luZdC6i/kXDbWnLOJoqwklBK6519iUnShaYceJ0y4FaiPtX/hRnV/X/xlUQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  
+  var scroller = document.querySelector('#scroller');
+
+  var rowTemplate = document.querySelector('#row-template');
+
+  var sentinel = document.querySelector('#sentinel');
+
+  var counter = 0;
+
+  function loadItems(){
+
+    fetch(`/load_blocks?c=${counter}`).then((response) => {
+      response.json().then((data) => {
+        if (!data.length){
+          sentinel.innerHTML = '<p style="text-align: center;">Non ci sono altri blocchi da visualizzare</p>';
+        }
+
+        for (var i = 0; i < data.length; i++){
+          let template_clone = rowTemplate.content.cloneNode(true);
+          let base = window.location.protocol + "//" + window.location.host
+          
+          template_clone.querySelector('#block').innerHTML = "<a href='" + base  +"/block-detail/" + `${data[i][0]['height']}` + "'>" + `${data[i][0]['height']}` + "</a>";
+          template_clone.querySelector('#hash').innerHTML = "<a href='" + base  +"/block-detail/"+ `${data[i][0]['height']}` + "'>" + `${data[i][0]['hash']}` + "</a>";
+          template_clone.querySelector('#miner').innerHTML = `${data[i][0]['time']}`;
+          template_clone.querySelector('#time').innerHTML = `${data[i][0]['height']}`;
+          template_clone.querySelector('#txs').innerHTML = `${data[i][0]['txcount']}`;
+
+          scroller.appendChild(template_clone);
+
+          counter += 1;
+        }
+
+      })
+    })
+  }
+
+  var intersectionObserver = new IntersectionObserver (entries => {
+    if (entries[0].intersectionRatio <= 0){
+      return
+    }
+    loadItems();
+  });
+
+  intersectionObserver.observe(sentinel);
+
+
+</script>
+
+
+{%endblock%}

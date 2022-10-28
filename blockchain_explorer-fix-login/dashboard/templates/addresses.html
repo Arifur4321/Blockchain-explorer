@@ -1,0 +1,41 @@
+{%extends "base.html" %}
+
+{%block content%}
+<a href={{url_for('pdf_generator_addresseslist')}}> <img class="pdf-icon" src={{ url_for('static', filename='img/PDF-ICON.png' )
+}} data-toggle="tooltip" data-placement="top" title="Generate PDF" /> </a>
+
+<h2 class="generic-title title-centered">Indirizzi</h2>
+
+<div class="table-container">
+
+    <table class="table table-striped">
+        <thead>
+            <th>Indirizzo</th>
+            <th>Transazioni</th>
+            <th>Conferme</th>
+            <th>Assets</th>
+            <th>Streams</th>
+        </thead>
+
+        <tbody>
+            {% for address in listAddresses %}
+                <tr>
+                    <td>{{address['address']}}</td>
+                    <td>{{address['txs']}}</td>
+                    <td>{{address['confirmed']}}</td>
+                    <td>{{address['assets']}}</td>
+                    <td>{{address['streams']}}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
+{% if previous_url and previous_url != 'None' %}
+    <div class="previous-url-button">
+        <a href={{previous_url}}>Indietro</a>
+    </div>
+{% endif %}
+
+{%endblock%}

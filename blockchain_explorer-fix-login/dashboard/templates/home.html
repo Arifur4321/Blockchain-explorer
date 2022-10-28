@@ -1,0 +1,204 @@
+{%extends "base.html" %}
+
+{%block head %}
+{{super()}}
+
+{% for jsResource in jsResources %}
+{{ jsResource|indent(4)|safe }}
+{% endfor %}
+
+{% for cssResource in cssResources %}
+{{ cssResource|indent(4)|safe }}
+{% endfor %}
+
+{{ js_resources|indent(4)|safe }}
+{{ css_resources|indent(4)|safe }}
+{{ script|indent(4)|safe }}
+{{ scriptbar|indent(4)|safe }}
+
+{% for js in filter.js_scripts%}
+{{ js| indent(4) | safe }}
+{%endfor%}
+{%endblock%}
+
+{%block content%}
+
+<a href={{url_for('pdf_generatorhome')}}> <img class="pdf-icon" src={{ url_for('static', filename='img/PDF-ICON.png' )
+}} data-toggle="tooltip" data-placement="top" title="Generate PDF" /> </a>
+
+
+<div id="main-dashboard-page-container">
+    {% if logged == 1 %}
+        <div class="logout-container">
+            <a href="/logout">Logout</a>
+        </div>
+    {% endif %}
+
+    {% if filtered is defined %}
+    <div> Filtered </div>
+    {% else %}
+
+    <div class="container">
+        <form method="POST">
+            <div class="form-group col-sm-4">
+                <label for="nomeUtente">Nome Utente</label>
+                <input type="text" class="form-control" id="nomeUtente" name="nomeUtente" aria-describedby="nomeUtente"
+                    placeholder="Inserisci il nome utente">
+            </div>
+
+            <div class="form-group col-sm-3">
+                <label for="dataInizio1">Data Inizio</label>
+                <input type="date" class="form-control" id="dataInizio1" name="dataInizio1" placeholder="Inserisci la data iniziale">
+            </div>
+            <div class="form-group col-sm-3">
+                <label for="dataFine1">Data Fine</label>
+                <input type="date" class="form-control" id="dataFine1" name="dataFine1" placeholder="Inserisci la data finale">
+            </div>
+
+
+
+            <div class="form-group col-sm-2">
+                <label for="cerca"> </label>
+                <button type="submit" class="form-control btn btn-primary">Cerca</button>
+            </div>
+        </form>
+        {% if filtered_assets is defined %}
+        <table class="table table-striped dashboard-filtered-table">
+            <thead>
+                <tr>
+                    <!-- [{"value": 0, "userName": "Damiano--19/09/2022 10:24:20", "idFascicolo": "kjgsdfkjsafd", 
+                    "statoOld": "27", "statoNew": "98", "tipo_oprazione": "Cambio Stato Fascicolo", "descrizione": "testin putpose"}]-->
+                    <th>Nome Utente</th>
+                    <th>Data</th>
+                    <th>Tipo Operazione</th>
+                    <th>Descrizione</th>
+                    <th>Stato</th>
+                    <th>Indirizzo Blockchain</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                
+                {% for asset in filtered_assets %}
+
+                    <tr>
+                        <td> <a href={{ url_for('assetDetail',  assetid = loop.index0,  ) }}>{{asset['userName'].partition("-")[0] }}</a></td>
+                        <td>{{asset['userName'][-19:] }}</td>
+                        <td>{{asset['tipo_oprazione'] }}</td>
+                        <td>{{asset['descrizione'] }}</td>
+
+                        {% if asset['tipo_oprazione']=="Cambio Stato Fascicolo"%}
+                            <td>{{asset['statoNew'] }}</td>
+                        {% elif asset['tipo_oprazione']=="Cancellazione Messaggio Fascicolo"%}
+                            <td>{{asset['statoCancellazione'] }}</td>
+                        {% elif asset['tipo_oprazione']=="Cancellazione Alert Fascicolo"%}
+                            <td>{{asset['statoCancellazione'] }}</td>
+                        {% elif asset['tipo_oprazione']=="Caricamento Nuovo Documento nel Fascicolo"%}
+                            <td></td>
+                        {% elif asset['tipo_oprazione']=="Modifica Documento nel Fascicolo"%}
+                            <td></td>
+                        {% elif asset['tipo_oprazione']=="Visualizzazione Documento nel Fascicolo"%}
+                            <td></td>
+                        {% elif asset['tipo_oprazione']=="Cancellazione Documento nel Fascicolo"%}
+                            <td>{{asset['statoDocumento'] }}</td>
+                        {% elif asset['tipo_oprazione']=="Conferma Lettura Messagio nel Fascicolo"%}
+                            <td>{{asset['statoLettura'] }}</td>
+                        {% elif asset['tipo_oprazione']=="Spegnimento Alert del Fascicolo"%}
+                            <td>{{asset['statoLettura'] }}</td>
+                        {% elif asset['tipo_oprazione']=="Nuovo Messaggio nel Fascicolo"%}
+                            <td></td>
+                        {% elif asset['tipo_oprazione']=="Nuovo Alert nel Fascicolo"%}
+                            <td></td>
+                        {% elif asset['tipo_oprazione']=="Modifica Messaggio nel Fascicolo"%}
+                            <td></td>
+                        {% elif asset['tipo_oprazione']=="Modifica Alert nel Fascicolo"%}
+                            <td></td>
+                        {% elif asset['tipo_oprazione']=="Nuovo Scoring del Fascicolo"%}
+                            <td>{{asset['scoreNew'] }}</td>
+                        
+                        {%endif%}
+                        <td> 13sTd6nVoFxLJek1Lg3eC9BUno8fEHqZSX</td>
+                    </tr>
+
+                {% endfor%}
+            </tbody>
+        </table>
+        {% endif%}
+        <div id="chains" class="table-container col-sm-12">
+            <table class="table table-striped chain-info-table">
+
+                <thead>
+                    <tr>
+                        <th>Stato</th>
+                        <th>Nome Nodo</th>
+                        <th>Blocchi</th>
+                        <th>Transazioni</th>
+                        <th>Dettaglio Transazioni</th>
+                        <th>Data</th>
+                        <th>Indirizzi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td><span class="label label-success">Connected</span></td>
+                        <td><a href={{ url_for('chain') }}>{{info['chainname'] }}</a></td>
+                        <td><a href={{ url_for('blocks') }}>{{info['blocks'] + 1}}</a></td>
+                        <td><a href={{ url_for('transactions')}}> {{info['transactions']}}</a></td>
+                        <td><a href={{ url_for('assets') }}>{{info['assets']}}</a></td>
+                        <td><a href={{ url_for('streams') }}>{{info['streams']}}</a></td>
+                        <td><a href={{ url_for('addresses') }}>{{info['addresses']}}</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="container main-dashboard-container" style="padding: 5px;">
+            <div class="chart-and-analytics">
+                <div class="barchart-container">
+                    <div class="col-sm-12">
+                        <h3 class="generic-title" style="text-align: center; position: relative; bottom: 3px;">Dati Transazioni</h3>
+                        {{ divbar|indent(4)|safe }}
+                    </div>
+                </div>
+                <div class="analytics-container">
+                    <h2 class="analytics-title">Analitiche</h2>
+
+                    <div class="analytics-cards-container">
+
+                        {% for subject in analytics%}
+
+                        <div class="analytics-card">
+                            <p class="analytics-card-title">{{subject['title']}}</p>
+                            <ul class="analytics-list">
+
+                                {% for key,value in subject['data'].items() %}
+
+                                <li>{{key}}: {{value}}</li>
+
+                                {% endfor %}
+
+                            </ul>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            </div>
+            <div class="piechart-container">
+                <h3 class="piechart-title">Numero di Operazioni</h3>
+                {{div |indent(4)|safe }}
+            </div>
+        </div>
+    </div>
+    {%endif %}
+
+</div>
+
+{% if previous_url and previous_url != 'None' %}
+    <div class="previous-url-button">
+        <a href={{previous_url}}>Indietro</a>
+    </div>
+{% endif %}
+
+{%endblock%}

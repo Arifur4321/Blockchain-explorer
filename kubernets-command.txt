@@ -1,0 +1,7 @@
+kubectl get all -n multichainexplorer2
+
+kubectl get pods -n multichainexplorer2
+
+kubectl get ns multichainexplorer2
+
+kubectl get deployments -n multichainexplorer2

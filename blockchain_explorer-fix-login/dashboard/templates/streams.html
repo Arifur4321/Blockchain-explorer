@@ -1,0 +1,52 @@
+{%extends "base.html" %}
+ 
+
+{%block content%}
+ 
+<a href={{url_for('pdf_generator_streams')}}> <img class="pdf-icon" src={{ url_for('static', filename='img/PDF-ICON.png' )
+}} data-toggle="tooltip" data-placement="top" title="Generate PDF" /> </a>
+
+<h2 class="generic-title title-centered">Streams</h2>
+
+<div class="table-container">
+  <table   class="table table-striped">
+    <thead>
+      <tr>
+
+        <th scope="col">Nome</th>
+        <th scope="col">Oggetti PDF</th>
+        <th scope="col">Chiavi</th>
+        <th scope="col">Dettagli Editore</th>
+        <th scope="col">Restrizioni</th>
+        <th></th>
+        <th scope="col">Dettagli Creatore</th>
+        <th scope="col">Transazione di Creazione</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for asset in streamsdata %}
+
+        <tr>
+          <td>{{asset['name']}} </td>
+          <td>{{asset['items']}} </td>
+          <td>{{asset['keys']}} </td>
+          <td>{{asset['publishers']}} </td>
+          <td>{{restrictions[loop.index0]}}<td>
+          <td>13sTd6nVoFxLJek1Lg3eC9BUno8fEHqZSX</td>
+          <td>{{asset['createtxid']}} </td>
+        </tr>
+
+      {% endfor %}
+
+    </tbody>
+    </table>
+</div>
+
+{% if previous_url and previous_url != 'None' %}
+    <div class="previous-url-button">
+        <a href={{previous_url}}>Indietro</a>
+    </div>
+{% endif %}
+
+{%endblock%}

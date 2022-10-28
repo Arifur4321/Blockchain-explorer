@@ -1,0 +1,69 @@
+.table-container{
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
+}
+
+.table-container thead{
+    background-color: #e2e2e2;
+}
+
+.table-container table{
+    width: 75vw;
+}
+
+.assets-table-container{
+    position: relative;
+    bottom: 33px;
+}
+
+.assets-table-container #myTable{
+    width: 80vw;
+    border: none;
+}
+
+.assets-table-container #myTable thead{
+    background-color: #e2e2e2;
+}
+
+.assets-table-container #myTable th{
+    border-bottom: none;
+}
+
+.assets-table-container #myTable thead .sorting{
+    background: url(../img/ord-off.png) no-repeat center right;
+}
+
+.assets-table-container #myTable thead .sorting_asc{
+    background: url(../img/ord-asc.png) no-repeat center right;
+}
+
+.assets-table-container #myTable thead .sorting_desc{
+    background: url(../img/ord-desc.png) no-repeat center right;
+}
+
+
+#myTable_filter input, .dataTables_length select{
+    border: 1px solid #a1a1a1;
+    border-radius: 5px;
+    font-weight: 300;
+}
+
+#myTable_filter, .dataTables_length{
+    margin: 15px;
+}
+
+.transactions-table-block-detail-container{
+    flex-direction: column;
+    margin: auto;
+    width: 75vw;
+}
+
+.dashboard-filtered-table{
+    position: relative;
+    top: 20px;
+}
+
+.dashboard-filtered-table thead, .chain-info-table thead{
+    background-color: #dedede;
+}

@@ -1,0 +1,292 @@
+{%extends "base.html" %}
+
+{%block content%}
+    <a href={{ url_for('pdf_generatordetails' , assetid=asset['issuetxid']) }} > <img class="pdf-icon" src={{ url_for('static', filename='img/PDF-ICON.png') }}  data-toggle="tooltip" data-placement="top" title="Generate PDF" />   </a>
+    
+    <h2 class="generic-title title-centered">Dettagli Asset {{asset['name'].partition("-")[0]}}</h2>
+    
+    <div class="table-container">
+        <table class="table table-striped">
+
+            <tr>
+                <td>Nome</td>
+                <td>{{asset['name'].partition("-")[0]}}</td>
+            </tr>
+
+            <tr>
+                <td>Data</td>
+                <td>{{asset['name'][-19:] }}</td>
+            </tr>
+
+            <tr>
+                <td>Tipo Operazione Effettuata</td>
+                <td>{{asset['details']['tipo_oprazione'] }}</td>
+            </tr>
+
+            <tr>
+                <td>Descrizione</td>
+                <td>{{asset['details']['descrizione'] }}</td>
+            </tr>
+
+            {% if asset['details']['tipo_oprazione']=="Cambio Stato Fascicolo"%}
+                <tr>
+                    <td>ID Fascicolo</td>
+                    <td>{{asset['details']['idFascicolo'] }}</td>
+                </tr> 
+
+                <tr>
+                    <td>Vecchio Stato</td>
+                    <td>{{asset['details']['statoOld'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Nuovo Stato</td>
+                    <td>{{asset['details']['statoNew'] }}</td>
+                </tr>
+
+            {% elif asset['details']['tipo_oprazione']=="Nuovo Scoring del Fascicolo"%}
+                <tr>
+                    <td>ID Fascicolo</td>
+                    <td>{{asset['details']['idFascicolo'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Vecchio Punteggio</td>
+                    <td>{{asset['details']['scoreOld'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Nuovo Punteggio</td>
+                    <td>{{asset['details']['scoreNew'] }}</td>
+                </tr>
+
+            {% elif asset['details']['tipo_oprazione']=="Cancellazione Alert Fascicolo" or  asset['details']['tipo_oprazione']=="Cancellazione Messaggio Fascicolo"%}
+
+                <tr>
+                    <td>Stato Cancellazione</td>
+                    <td>{{asset['details']['statoCancellazione'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>ID Fascicolo</td>
+                    <td>{{asset['details']['idFascicolo'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>ID Messaggio Alert</td>
+                    <td>{{asset['details']['idMessaggioAlert'] }}</td>
+                </tr>
+
+            {% elif asset['details']['tipo_oprazione']=="Caricamento Nuovo Documento nel Fascicolo" or asset['details']['tipo_oprazione']=="Modifica Documento nel Fascicolo" or asset['details']['tipo_oprazione']=="Visualizzazione Documento nel Fascicolo"%}
+                <tr>
+                    <td>ID Fascicolo</td>
+                    <td>{{asset['details']['idFascicolo'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Nome File Doc</td>
+                    <td>{{asset['details']['nomeFileDoc'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>ID Documento</td>
+                    <td>{{asset['details']['idDocumento'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Descrizione Tipo Doc</td>
+                    <td>{{asset['details']['descrizioneTipoDoc'] }}</td>
+                </tr>
+
+            {% elif asset['details']['tipo_oprazione']=="Cancellazione Documento nel Fascicolo"%}
+                <tr>
+                    <td>ID Fascicolo</td>
+                    <td>{{asset['details']['idFascicolo'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Nome File Doc</td>
+                    <td>{{asset['details']['nomeFileDoc'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>ID Documento</td>
+                    <td>{{asset['details']['idDocumento'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Descrizione Tipo Doc</td>
+                    <td>{{asset['details']['descrizioneTipoDoc'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Stato Documento</td>
+                    <td>{{asset['details']['statoDocumento'] }}</td>
+                </tr>
+
+            {% elif asset['details']['tipo_oprazione']=="Conferma Lettura Messagio nel Fascicolo" or asset['details']['tipo_oprazione']=="Spegnimento Alert del Fascicolo"%}
+                <tr>
+                    <td>ID Fascicolo</td>
+                    <td>{{asset['details']['idFascicolo'] }}</td>
+                </tr>
+                
+                <tr>
+                    <td>ID Messaggio Alert</td>
+                    <td>{{asset['details']['idMessaggioAlert'] }}</td>
+                </tr>
+
+                <tr>
+                    <td>Stato Lettura</td>
+                    <td>{{asset['details']['statoLettura'] }}</td>
+                </tr>
+
+            {% elif asset['details']['tipo_oprazione']=="Nuovo Messaggio nel Fascicolo" or asset['details']['tipo_oprazione']=="Nuovo Alert nel Fascicolo" or asset['details']['tipo_oprazione']=="Modifica Messaggio nel Fascicolo" or asset['details']['tipo_oprazione']=="Modifica Alert nel Fascicolo"%}
+                <tr>
+                    <td>ID Fascicolo</td>
+                    <td>{{asset['details']['idFascicolo'] }}</td>
+                </tr>
+                
+                <tr>
+                    <td>ID Messaggio Alert</td>
+                    <td>{{asset['details']['idMessaggioAlert'] }}</td>
+                </tr>
+            
+            {%endif%}
+
+            <tr>
+                <td>Prima Transazione</td>
+                <td>{{asset['issuetxid'] }}</td>
+            </tr>
+
+            {% if ('assetref' in asset) and (asset['assetref'] != "") %}
+
+                <tr>
+                    <td>Riferimento Asset</td>
+                    <td>{{asset['assetref'] }}</td>
+                </tr>
+            
+            {% endif %}
+
+            <tr>
+                <td>NFT Block Aperto</td>
+                <td>
+
+                    {{asset['open']|string()}} 
+
+                    {% if ("canopen" in asset) and asset['canopen'] %}
+
+                        {% if ("canclose" in asset) and asset['canclose']  %}
+
+                            (Può aprire e chiudere)
+
+                        {% else %}
+
+                            (Può aprire)
+
+                        {% endif %}
+
+                    {% endif %}
+
+                    {% if ("canclose" in asset) and asset['canclose'] %}
+
+                        (Può chiudere)
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>NFT Token</td>
+                <td>{{asset['fungible']|string()}} </td>
+            </tr>
+
+            <tr>
+                <td>Restrizione</td>
+                <td>
+
+                    {% if 'restrict in asset' and asset['restrict'] != {} %}
+
+                        {% for k, v in asset['restrict'].items() %}
+
+                            {% if v %}
+                                {{k}} &nbsp; 
+                            {% endif %}
+                            
+                        {% endfor %}
+
+                    {% else %}
+                            None
+                    {% endif %}
+
+                </td>
+            </tr>
+
+            <tr>
+                <td>Issues</td>
+                <td>
+                    {{asset['issueqty']}}&nbsp; 
+
+                    {% if ("totallimit" in asset) and (asset['totallimit']|string() != "None" ) %}
+                        Limite {{asset['totallimit']|string()}}&nbsp;
+                    {% endif %}
+
+                    {% if ("issuelimit" in asset) and (asset['issuelimit']|string() != "None" ) %}
+                        Massimo {{asset['issuelimit']|string()}} per issue
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Indirizzo Blockchain</td>
+                <td>13sTd6nVoFxLJek1Lg3eC9BUno8fEHqZSX</td>
+            </tr>
+            
+            {% if 'issuecount' in asset %}
+                <tr>
+                    <td>Numero di Transazioni</td>
+                    <td>{{asset['issuecount']|string()}}</td>
+                </tr>
+            {% endif %}
+
+            <tr>
+                <td>Multiple</td>
+                <td>{{asset['multiple']|string()}}</td>
+            </tr>
+
+            <tr>
+                <td>Unità</td>
+                <td>
+                    {{asset['units']|string()}}
+                    
+                    {% if ("issueonlysingleunit" in asset) and asset['issueonlysingleunit'] %}
+                        &nbsp;(Single unit per issuance)
+                    {% endif %}
+                </td>
+            </tr>
+
+            <tr>
+                <td>Indirizzo User</td>
+                <td>
+
+                    {{mc.explorerlistassetaddresses(asset['issuetxid'])|length}}
+
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="container">
+        <h2 class="generic-title">Legenda</h2>
+        <p>NFT Token (Non Fungible Token) , NFT Block (aperto per il futuro) , Riferimento Asset (Numero di transazione dell'asset) , Restrizione (Permesso di dettaglio) , Prima Transazione (Dettagli Informazioni sulla transazione)</p>
+    </div>
+
+    {% if previous_url and previous_url != 'None' %}
+    <div class="previous-url-button">
+        <a href={{previous_url}}>Indietro</a>
+    </div>
+    {% endif %}
+    
+{%endblock%}
+

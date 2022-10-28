@@ -1,0 +1,71 @@
+version: "3.8"
+
+services:
+  frontend:
+    build: app
+    image:  arifur43210/multichain-explorer-2:latest    # or you local Dockerfile  path
+    ports:
+      - "5000:5000"
+    depends_on:
+      - masternode
+ 
+  masternode:
+        build: ./master
+        stdin_open: true
+        tty: true
+        expose:
+            - 7557
+            - 8002
+        environment:
+            
+            CHAINNAME: MyChain
+            NETWORK_PORT: 7557
+            RPC_PORT: "${RPC_PORT}"
+            RPC_USER: "${RPC_USER}"
+            RPC_PASSWORD: "${RPC_PASS}"
+            RPC_ALLOW_IP: 0.0.0.0/0.0.0.0
+            PARAM_TARGET_BLOCK_SIZE: target-block-time|30
+            PARAM_ANYONE_CAN_CONNECT: anyone-can-connect|true
+            PARAM_ANYONE_CAN_MINE: anyone-can-mine|true
+ 
+  slavenode:
+        build: ./node
+        stdin_open: true
+        tty: true
+        expose:
+            - 7557
+            - 8002
+        environment:
+            CHAINNAME: MyChain
+            NETWORK_PORT: 7557
+            RPC_PORT: "${RPC_PORT}"
+            RPC_USER: "${RPC_USER}"
+            RPC_PASSWORD: "${RPC_PASS}"
+            RPC_ALLOW_IP: 0.0.0.0/0.0.0.0
+            MASTER_NODE: masternode
+        links:
+            - masternode
+        depends_on:
+            - masternode
+  explorernode:
+        build: ./explorer
+        stdin_open: true
+        tty: true
+        expose:
+            - 2750
+            - 7557
+            - 8002
+        environment:
+            CHAINNAME: MyChain
+            NETWORK_PORT: 7557
+            RPC_PORT: "${RPC_PORT}"
+            RPC_USER: "${RPC_USER}"
+            RPC_PASSWORD: "${RPC_PASS}"
+            RPC_ALLOW_IP: 0.0.0.0/0.0.0.0
+            MASTER_NODE: masternode
+        links:
+            - masternode
+        depends_on:
+            - masternode
+   
+

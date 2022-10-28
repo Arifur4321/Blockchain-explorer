@@ -1,0 +1,91 @@
+{%extends "base.html" %}
+
+{%block head %}
+    {{super()}}
+    {% for js in filter.js_scripts%}
+        {{ js| indent(4) | safe }}
+    {%endfor%}
+{%endblock%}
+
+
+{%block content%}
+
+    <div id="main-dashboard-page-container">
+
+    {% if filtered is defined %}
+        <div> Filtered </div>
+    {% else %}
+
+        <div class="container">
+            <div id="filters" class="container">
+                {%for div in filter.divs['form'] %}
+                    {{ div | safe | indent(4)  }}
+                {%endfor%}
+            </div>
+            
+            <div id="chains" class="table-container">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <th>Stato</th>
+                            <th>Nome Nodo</th>
+                            <th>Blocchi</th>
+                            <th>Transazioni</th>
+                            <th>Dettaglio Transazioni</th>
+                            <th>Data</th>
+                            <th>Indirizzi</th>
+                        </tr>
+                        <tr>
+                            <td><span class="label label-success">Connected</span></td>
+                            <td><a href={{ url_for('chain') }}>{{info['chainname'] }}</a></td>
+                            <td><a href={{ url_for('blocks') }}>{{info['blocks']}}</a></td>
+                            <td><a href= {{ url_for('transactions')}}> {{info['transactions']}}</a></td>
+                            <td><a href= {{ url_for('assets') }}>{{info['assets']}}</a></td>
+                            <td><a href= {{ url_for('streams') }}>{{info['streams']}}</a></td>
+                            <td><a href= {{ url_for('addresses') }}>{{info['addresses']}}</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="container main-dashboard-container" style="padding: 5px;">
+                <div class="chart-and-analytics">
+                    <div class="barchart-container">
+                        <div class="col-sm-12">
+                            {{ divbar|indent(4)|safe }}
+                        </div>
+                    </div>
+                    <div class="analytics-container">
+                        <h2 class="analytics-title">Analitiche</h2>
+
+                        <div class="analytics-cards-container">
+
+                            {% for subject in analytics%}
+
+                            <div class="analytics-card">
+                                    <p class="analytics-card-title">{{subject['title']}}</p>
+                                    <ul class="analytics-list">
+
+                                        {% for key,value in subject['data'].items() %}
+
+                                            <li>{{key}}: {{value}}</li>
+
+                                        {% endfor %}
+
+                                    </ul>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="piechart-container">
+                    <h3 class="piechart-title">Numero di Operazioni</h3>
+                    {{div |indent(4)|safe }}
+                </div>
+            </div>
+        </div>
+    {%endif %}
+
+    </div>
+{%endblock%}

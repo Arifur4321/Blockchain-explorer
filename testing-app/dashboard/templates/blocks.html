@@ -1,0 +1,45 @@
+{%extends "base.html" %}
+
+{%block content%}
+<a href={{url_for('pdf_generatorblocks')}}> <img style="float:right; margin-right: 40px; " src={{ url_for('static', filename='img/PDF-ICON.png' )
+}} data-toggle="tooltip" data-placement="top" title="Generate PDF" /> </a>
+<div class="table-container">
+  
+    <table class="table table-striped">
+        <thead>
+          <tr>
+         
+            <th scope="col">Blocco</th>
+            <th scope="col">Hash</th>
+            <th scope="col">Miner</th>
+            <th scope="col">Data</th>
+            <th scope="col">Transazioni</th>
+        
+          </tr>
+        </thead>
+        <tbody>
+            {% for block in listBlocksArray %}
+
+        <tr>
+                
+            <td>{{block[0]['height']}}</td>
+            <td>{{block[0]['hash']}}</td>
+            <td>{{block[0]['miner']}}</td>
+            <td>{{datetime.fromtimestamp(block[0]['time'])}}</td>
+            <td>{{block[0]['txcount']}}</td>
+
+        </tr>
+
+        {% endfor %}
+           
+        </tbody>
+      </table>
+
+
+
+
+</div>
+
+
+
+{%endblock%}

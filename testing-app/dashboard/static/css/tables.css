@@ -1,0 +1,20 @@
+.table-container{
+    display: flex;
+    justify-content: center;
+    padding-top: 50px;
+}
+
+.table-container thead{
+    background-color: #e2e2e2;
+}
+
+.table-container table{
+    width: 75vw;
+}
+
+/* #streamtable{
+
+    margin-top: 30px;
+    
+    width: 90% !important; 
+} */

@@ -1,0 +1,7 @@
+.env
+dashboard/.env
+dashboard/reports
+dashboard/__pycache__
+dashboard/helpers/__pycache__
+dashboard/views/__pycache__
+dashboard/report.pdf

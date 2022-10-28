@@ -1,0 +1,96 @@
+{%extends "base.html" %}
+
+{%block content%}
+
+<a href={{ url_for('pdf_generator_blockdetails' , blockid=block['hash']) }} > <img class="pdf-icon" src={{ url_for('static', filename='img/PDF-ICON.png') }}  data-toggle="tooltip" data-placement="top" title="Generate PDF" />   </a>
+
+    <h2 class="generic-title title-centered">Dettagli Blocco {{block['height']}}</h2>
+
+    <div class="table-container transactions-table-block-detail-container">
+        <h3 class="generic-title">Dettaglio Blocco</h3>
+        <table class="table table-striped">
+            <tr>
+                <td>Hash</td>
+                <td>{{block['hash']}}</td>
+            </tr>
+
+            <tr>
+                <td>Blocco Precedente</td>
+                <td>{{block['previousblockhash']}}</td>
+            </tr>
+
+            <tr>
+                <td>Blocco Successivo</td>
+                <td>{{block['nextblockhash']}}</td>
+            </tr>
+
+            <tr>
+                <td>ID Blocco</td>
+                <td>{{block['height']}}</td>
+            </tr>
+
+            <tr>
+                <td>Miner</td>
+                <td>{{block['miner']}}</td>
+            </tr>
+
+            <tr>
+                <td>Versione</td>
+                <td>{{block['version']}}</td>
+            </tr>
+
+            <tr>
+                <td>Transaction Merkle Root</td>
+                <td>{{block['merkleroot']}}</td>
+            </tr>
+
+            <tr>
+                <td>Data</td>
+                <td>{{datetime.fromtimestamp(block['time'])}}</td>
+            </tr>
+
+            <tr>
+                <td>Nonce</td>
+                <td>{{block['nonce']}}</td>
+            </tr>
+
+            <tr>
+                <td>Transazioni</td>
+                <td>{{block['tx']|length()}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="table-container transactions-table-block-detail-container">
+        
+        <h3 class="generic-title">Transazioni</h3>
+
+        <table class="table table-striped">
+
+            <thead>
+                <th>ID Transazione</th>
+                <th>Tipologia</th>
+            </thead>
+
+            <tbody>
+                {% for tx in txs %}
+
+                <tr>
+                    <td>{{tx['txid']}}</td>
+                    <td>{{tx['tags'][0].capitalize()}}</td>
+                </tr>
+
+                {% endfor %}
+            </tbody>
+
+        </table>
+    </div>
+
+    {% if previous_url and previous_url != 'None' %}
+    <div class="previous-url-button">
+        <a href={{previous_url}}>Indietro</a>
+    </div>
+    {% endif %}
+
+{%endblock%}
+

@@ -1,0 +1,14 @@
+{%extends "base.html" %}
+
+{%block content%}
+<div class="error-container">
+    <h1 style="text-align: center; padding: 30px;">403 | Non sei autorizzato a visualizzare questi contenuti</h1>
+</div>
+
+
+{% if previous_url and previous_url != 'None' %}
+    <div class="previous-url-button">
+        <a href={{previous_url}}>Indietro</a>
+    </div>
+{% endif %}
+{%endblock%}
